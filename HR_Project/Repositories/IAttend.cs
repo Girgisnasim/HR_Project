@@ -2,5 +2,7 @@
 {
     public interface IAttend
     {
+        //Get Attend By Name
+
     }
 }
