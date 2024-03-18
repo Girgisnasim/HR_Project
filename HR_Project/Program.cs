@@ -1,5 +1,6 @@
 
 using HR_Project.Models;
+using HR_Project.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace HR_Project
@@ -16,6 +17,20 @@ namespace HR_Project
 
             builder.Services.AddDbContext<HRContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("conn")));
+
+            builder.Services.AddScoped<Repositories.IAttend, Repositories.Attend>();
+            builder.Services.AddScoped<Repositories.IDepartment, Repositories.Department>();
+            builder.Services.AddScoped<Repositories.IEmp_Holiday, Repositories.Emp_Holiday>();
+            builder.Services.AddScoped<Repositories.IEmployee, Repositories.Employee>();
+            builder.Services.AddScoped<Repositories.IGeneral_Rules, Repositories.General_Rules>();
+            builder.Services.AddScoped<Repositories.IHoliday, Repositories.Holiday>();
+            builder.Services.AddScoped<Repositories.IHR, Repositories.HR>();
+            builder.Services.AddScoped<Repositories.IPermissions_Department, Repositories.Permissions_Department>();
+            builder.Services.AddScoped<Repositories.Permissions_HR, Repositories.Permissions_HR>();
+
+
+
+
 
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
