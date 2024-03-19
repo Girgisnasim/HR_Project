@@ -2,11 +2,11 @@
 
 namespace HR_Project.Repositories
 {
-    public class HR:IHR
+    public class Attends:IAttend
     {
         private HRContext context;
 
-        public HR(HRContext context)
+        public Attends(HRContext context)
         {
             this.context = context;
         }

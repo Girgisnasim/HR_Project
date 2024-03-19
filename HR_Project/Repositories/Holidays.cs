@@ -2,11 +2,11 @@
 
 namespace HR_Project.Repositories
 {
-    public class Permissions_HR
+    public class Holidays:IHoliday
     {
         private HRContext context;
 
-        public Permissions_HR(HRContext context)
+        public Holidays(HRContext context)
         {
             this.context = context;
         }

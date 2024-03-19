@@ -2,11 +2,11 @@
 
 namespace HR_Project.Repositories
 {
-    public class Department:IDepartment
+    public class Emp_Holidays:IEmp_Holiday
     {
         private HRContext context;
 
-        public Department(HRContext context)
+        public Emp_Holidays(HRContext context)
         {
             this.context = context;
         }

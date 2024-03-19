@@ -2,11 +2,11 @@
 
 namespace HR_Project.Repositories
 {
-    public class General_Rules:IGeneral_Rules
+    public class Permissions_HRs
     {
         private HRContext context;
 
-        public General_Rules(HRContext context)
+        public Permissions_HRs(HRContext context)
         {
             this.context = context;
         }

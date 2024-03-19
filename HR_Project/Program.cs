@@ -18,15 +18,15 @@ namespace HR_Project
             builder.Services.AddDbContext<HRContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("conn")));
 
-            builder.Services.AddScoped<Repositories.IAttend, Repositories.Attend>();
-            builder.Services.AddScoped<Repositories.IDepartment, Repositories.Department>();
-            builder.Services.AddScoped<Repositories.IEmp_Holiday, Repositories.Emp_Holiday>();
-            builder.Services.AddScoped<Repositories.IEmployee, Repositories.Employee>();
-            builder.Services.AddScoped<Repositories.IGeneral_Rules, Repositories.General_Rules>();
-            builder.Services.AddScoped<Repositories.IHoliday, Repositories.Holiday>();
-            builder.Services.AddScoped<Repositories.IHR, Repositories.HR>();
-            builder.Services.AddScoped<Repositories.IPermissions_Department, Repositories.Permissions_Department>();
-            builder.Services.AddScoped<Repositories.Permissions_HR, Repositories.Permissions_HR>();
+            builder.Services.AddScoped<Repositories.IAttend, Repositories.Attends>();
+            builder.Services.AddScoped<Repositories.IDepartment, Repositories.Departments>();
+            builder.Services.AddScoped<Repositories.IEmp_Holiday, Repositories.Emp_Holidays>();
+            builder.Services.AddScoped<Repositories.IEmployee, Repositories.Employees>();
+            builder.Services.AddScoped<Repositories.IGeneral_Rules, Repositories.Generals_Rules>();
+            builder.Services.AddScoped<Repositories.IHoliday, Repositories.Holidays>();
+            builder.Services.AddScoped<Repositories.IHR, Repositories.HRs>();
+            builder.Services.AddScoped<Repositories.IPermissions_Department, Repositories.Permissions_Departments>();
+            builder.Services.AddScoped<Repositories.Permissions_HRs, Repositories.Permissions_HRs>();
 
 
 
