@@ -6,6 +6,6 @@ namespace HR_Project.Repositories
     public interface IEmployee
     {
         //Get Employee
-        public Emp_DTO GetEmployeeName(string Name);
+        public Emp_DTO GetEmployeeName(string Name,int month,int year);
     }
 }
