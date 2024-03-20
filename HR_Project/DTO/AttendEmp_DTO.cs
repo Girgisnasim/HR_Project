@@ -4,8 +4,8 @@
     {
         public string DepartmentName { get; set; }
         public string EmpName { get; set; }
-        public TimeSpan AttendTime  { get; set; }
-        public TimeSpan LeaveTime { get; set; }
-        public DateTime AttendDate { get; set; }
+        public List<TimeSpan> AttendTime  { get; set; } = new List<TimeSpan>();
+        public List<TimeSpan>  LeaveTime { get; set; } = new List<TimeSpan>();
+        public List<DateOnly> AttendDate { get; set; } = new List<DateOnly>();
     }
 }
