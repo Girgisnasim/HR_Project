@@ -32,14 +32,22 @@ namespace HR_Project.Controllers
         }
         [HttpGet("attend")]
         public ActionResult GetAttend([FromQuery] int fromYear, [FromQuery] int fromMonth, [FromQuery] int fromDay,
-                                       [FromQuery] int toYear, [FromQuery] int toMonth, [FromQuery] int toDay)
+                                       [FromQuery] int toYear, [FromQuery] int toMonth, [FromQuery] int toDay, [FromQuery(Name = "name")] string? name)
         {
+
             // Create DateOnly instances from user-provided values
             DateOnly from = new DateOnly(fromYear, fromMonth, fromDay);
             DateOnly to = new DateOnly(toYear, toMonth, toDay);
 
-            List<AttendEmp_DTO> attendEmp_DTOs = EmployeeRepo.GetAttend(from, to);
-            return Ok(attendEmp_DTOs);
+            if (from > to || from.Year<2008|| (to.Year>DateTime.Now.Year || to.Month> DateTime.Now.Month || to.Day> DateTime.Now.Day))
+            {
+                return BadRequest();
+            }
+            else
+            {
+                List<AttendEmp_DTO> attendEmp_DTOs = EmployeeRepo.GetAttend(from, to, name);
+                return Ok(attendEmp_DTOs);
+            }
         }
     }
 }
