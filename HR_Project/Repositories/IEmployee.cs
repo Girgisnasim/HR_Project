@@ -8,6 +8,7 @@ namespace HR_Project.Repositories
         //Get Employee
         public Emp_DTO GetEmployeeName(string Name,int month,int year);
 
+
         ///////////////////////////
         public List<Employee> GetAll();
         public Employee Add(EmployeeWthDepartmentDTO EmployeeDTO);
@@ -16,5 +17,10 @@ namespace HR_Project.Repositories
         Employee GetEmployeeByName(string name);
         public Employee Edit(EmployeeWthDepartmentDTO EmployeeDTO, int id);
         public Employee Delete(int id);
+=======
+        //Get Attend
+        public List<AttendEmp_DTO> GetAttend(DateOnly  from, DateOnly to,string name);
+
     }
+
 }

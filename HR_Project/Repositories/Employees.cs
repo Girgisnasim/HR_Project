@@ -8,6 +8,7 @@ using System.Numerics;
 
 namespace HR_Project.Repositories
 {
+  
     public class Employees : IEmployee
     {
         private HRContext context;
@@ -16,6 +17,7 @@ namespace HR_Project.Repositories
         {
             this.context = context;
         }
+
 
 
         public List<Employee> GetAll()
@@ -179,6 +181,60 @@ namespace HR_Project.Repositories
 
         //    return employee;
         //}
+=======
+        //Clean Code to Don't repeat your self
+        public List<Attend> AttendEmps(DateOnly from, DateOnly to, string? name)
+        {
+            List<Attend> attends=new List<Attend>();
+            if (name != null)
+            {
+                Employee EMPNname = context.Employee.Where(e => e.Name == name).SingleOrDefault();
+                if (EMPNname != null)
+                {
+                    attends = context.Attend
+                          .Include(e => e.Employee)
+                          .Include(e => e.Employee.Department)
+                          .Where(e => e.Date >= from && e.Date <= to && (e.Employee.Name == name || e.Employee.Department.Name == name)).ToList();
+                }
+                else
+                {
+                    return attends;
+                }
+               
+            }
+            else
+            {
+                attends = context.Attend
+                                  .Include(e => e.Employee)
+                                  .Include(e => e.Employee.Department)
+                                  .Where(e => e.Date >= from && e.Date <= to).ToList();
+            
+            }
+            return attends;
+        }
+
+        public List<AttendEmp_DTO> GetAttend(DateOnly from, DateOnly to, string? name)
+        {
+            List<Attend>attends=AttendEmps(from, to, name);
+            List<AttendEmp_DTO> attendEmp_DTOs = new List<AttendEmp_DTO>();
+
+                foreach (Attend emp in attends)
+                {
+                    AttendEmp_DTO attendEmp = new AttendEmp_DTO();
+                    attendEmp.EmpName = emp.Employee.Name;
+                    attendEmp.DepartmentName = emp.Employee.Department.Name;
+                    List<Attend> test = context.Attend.
+                        Where(e => e.Emp_id == emp.Emp_id).ToList();
+                    attendEmp.AttendTime.Add(emp.AttendTime);
+                    attendEmp.LeaveTime.Add(emp.LeaveTime);
+                    attendEmp.AttendDate.Add(emp.Date);
+                    attendEmp_DTOs.Add(attendEmp);
+
+                }
+                return attendEmp_DTOs;
+            }
+
+
         public Emp_DTO GetEmployeeName(string Name,int month,int year)
         { 
             
@@ -243,3 +299,8 @@ namespace HR_Project.Repositories
 
     }
 }
+
+
+
+
+
