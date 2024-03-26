@@ -1,9 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 
 namespace HR_Project.Models
 {
-    public class HRContext :DbContext
+    public class HRContext :IdentityDbContext<ApplicationUser>
     {
         public HRContext()
         {

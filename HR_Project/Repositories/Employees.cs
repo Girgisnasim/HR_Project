@@ -17,6 +17,111 @@ namespace HR_Project.Repositories
             this.context = context;
         }
 
+
+        public List<Employee> GetAll()
+        {
+            return context.Employee.Include(e => e.Department).ToList();
+
+        }
+        ////////////////////////////////////////////
+        public Employee GetEmployee(int id)
+        {
+            return context.Employee.Include(e => e.Department).FirstOrDefault(n => n.Id == id);
+
+
+        }
+        ////////////////////////////////////////////
+
+        public Employee GetEmployeeByName(string name)
+        {
+            return context.Employee.Include(e => e.Department)
+                                   .FirstOrDefault(e => e.Name == name);
+        }
+
+        ////////////////////////////////////////////
+
+        public Employee Add(EmployeeWthDepartmentDTO EmployeeDTO)
+        {
+           
+
+            Employee employee = new Employee()
+            {
+
+                SSN = EmployeeDTO.SSN,
+                Name = EmployeeDTO.Name,
+                Nationality = EmployeeDTO.Nationality,
+                Gender = EmployeeDTO.Gender,
+                phone = EmployeeDTO.phone,
+                Address = EmployeeDTO.Address,
+                Salary = EmployeeDTO.Salary,
+                HireDate = EmployeeDTO.HireDate,
+                BirthDate = EmployeeDTO.BirthDate,
+                LeaveTime = EmployeeDTO.LeaveTime,
+                AttendTime = EmployeeDTO.AttendTime,
+                Dept_id = EmployeeDTO.Dept_id,
+                
+
+            };
+            context.Employee.Add(employee);
+            return employee;
+
+        }
+
+        ////////////////////////////////////////////
+      
+        public Employee Edit(EmployeeWthDepartmentDTO EmployeeDTO, int id)
+        {
+
+
+            Employee employee = GetEmployee(id);
+            employee.Id = id;
+            employee.SSN = EmployeeDTO.SSN;
+            employee.Name = EmployeeDTO.Name;
+            employee.Nationality = EmployeeDTO.Nationality;
+            employee.Gender = EmployeeDTO.Gender;
+            employee.phone = EmployeeDTO.phone;
+            employee.Address = EmployeeDTO.Address;
+            employee.Salary = EmployeeDTO.Salary;
+            employee.HireDate = EmployeeDTO.HireDate.AddDays(1);
+            employee.BirthDate = EmployeeDTO.BirthDate.AddDays(1);
+            employee.LeaveTime = EmployeeDTO.LeaveTime;
+            employee.AttendTime = EmployeeDTO.AttendTime;
+            employee.Dept_id = EmployeeDTO.Dept_id;
+
+
+            return employee;
+
+        }
+
+        ////////////////////////////////////////////
+        public Employee Delete(int id)
+        {
+            Employee employee = GetEmployee(id);
+            context.Employee.Remove(employee);
+            return employee;
+        }
+
+
+
+
+
+        ////////////////////////////////////////////
+        public void Save()
+        {
+            context.SaveChanges();
+        }
+        ////////////////////////////////////////////
+     
+
+
+
+
+        //public List<Employee> GetEmployeeByName(string name)
+        //{
+        //    return context.Employee.Include(e => e.Department).Where(e => e.Name == name).ToList();
+        //}
+
+
         //public Emp_DTO GetEmployeeName(string Name)
         //{
         //    Employee Emp = context.Employee.Include(D => D.Department)
