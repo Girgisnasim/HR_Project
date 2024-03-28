@@ -1,8 +1,13 @@
 
 using HR_Project.Models;
 using HR_Project.Repositories;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+
 using static System.Net.Mime.MediaTypeNames;
+
+using System.Security.Principal;
+
 
 namespace HR_Project
 {
@@ -20,6 +25,9 @@ namespace HR_Project
 
             builder.Services.AddDbContext<HRContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("conn")));
+
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+            .AddEntityFrameworkStores<HRContext>();
 
             builder.Services.AddScoped<Repositories.IAttend, Repositories.Attends>();
             builder.Services.AddScoped<Repositories.IDepartment, Repositories.Departments>();

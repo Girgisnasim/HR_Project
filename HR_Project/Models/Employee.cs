@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Numerics;
+using System.Text.Json.Serialization;
 
 namespace HR_Project.Models
 {
@@ -53,18 +54,20 @@ namespace HR_Project.Models
         [DisplayFormat(DataFormatString = "{0:hh-mm}")]
         [Required]
         public TimeSpan AttendTime { get; set; }
-
+        [JsonIgnore]
         //relation with Department
         [ForeignKey("Department")]
         public int? Dept_id { get; set; }
         public  Department? Department { get; set; }
-
+        //[NotMapped]
+        //public string DeptName { get; set; }
+       
         //relation with HR
         [ForeignKey("HRs")]
         public int? HR_id { get; set; }
         public  HR? HRs { get; set; }
 
-
+       
         //relation with General_Rules
         [ForeignKey("General_Rules")]
         public int? Rules_id { get; set; }
@@ -72,12 +75,12 @@ namespace HR_Project.Models
 
 
         //relation with Attend
-
+       
         public List<Attend> Attend { get; set; }=new List<Attend>();
-    
-        
 
 
+
+       
 
         //relation with Holiday
         public List<Emp_Holiday> EmpHolidays { get; set; } = new List<Emp_Holiday>();
