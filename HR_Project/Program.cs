@@ -3,7 +3,11 @@ using HR_Project.Models;
 using HR_Project.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+
+using static System.Net.Mime.MediaTypeNames;
+
 using System.Security.Principal;
+
 
 namespace HR_Project
 {
@@ -11,7 +15,9 @@ namespace HR_Project
     {
         public static void Main(string[] args)
         {
+            var txt = "hi";
             var builder = WebApplication.CreateBuilder(args);
+            
 
             // Add services to the container.
 
@@ -42,6 +48,17 @@ namespace HR_Project
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy(txt,
+                builder =>
+                {
+                    builder.AllowAnyOrigin();
+                    builder.AllowAnyMethod();
+                    builder.AllowAnyHeader();
+                });
+            });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -54,7 +71,7 @@ namespace HR_Project
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
+            app.UseCors(txt);
 
             app.MapControllers();
 
