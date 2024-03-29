@@ -2,6 +2,7 @@
 {
     public class AttendEmp_DTO
     {
+        public int Id { get; set; }
         public string DepartmentName { get; set; }
         public string EmpName { get; set; }
         public List<TimeSpan> AttendTime  { get; set; } = new List<TimeSpan>();
