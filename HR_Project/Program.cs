@@ -4,10 +4,17 @@ using HR_Project.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+
+
+using static System.Net.Mime.MediaTypeNames;
+
+
 using System.Security.Principal;
 using System.Text;
+
 
 namespace HR_Project
 {
@@ -18,8 +25,14 @@ namespace HR_Project
 
         public static void Main(string[] args)
         {
+            var txt = "hi";
             var builder = WebApplication.CreateBuilder(args);
+
             var configuration = builder.Configuration;
+
+            
+
+
             // Add services to the container.
 
             builder.Services.AddControllers();
@@ -68,21 +81,22 @@ namespace HR_Project
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
             builder.Services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Demo", Version = "v1" });
             });
             builder.Services.AddSwaggerGen(swagger =>
             {
-                //This is to generate the Default UI of Swagger Documentation    
+                //Thisï¿½isï¿½toï¿½generateï¿½theï¿½Defaultï¿½UIï¿½ofï¿½Swaggerï¿½Documentationï¿½ï¿½ï¿½ï¿½
                 swagger.SwaggerDoc("v2", new OpenApiInfo
                 {
                     Version = "v1",
-                    Title = "ASP.NET 5 Web API",
+                    Title = "ASP.NETï¿½5ï¿½Webï¿½API",
                     Description = " ITI Projrcy"
                 });
 
-                // To Enable authorization using Swagger (JWT)    
+                //ï¿½Toï¿½Enableï¿½authorizationï¿½usingï¿½Swaggerï¿½(JWT)ï¿½ï¿½ï¿½ï¿½
                 swagger.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
                 {
                     Name = "Authorization",
@@ -90,7 +104,7 @@ namespace HR_Project
                     Scheme = "Bearer",
                     BearerFormat = "JWT",
                     In = ParameterLocation.Header,
-                    Description = "Enter 'Bearer' [space] and then your valid token in the text input below.\r\n\r\nExample: \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\"",
+                    Description = "Enterï¿½'Bearer'ï¿½[space]ï¿½andï¿½thenï¿½yourï¿½validï¿½tokenï¿½inï¿½theï¿½textï¿½inputï¿½below.\r\n\r\nExample:ï¿½\"Bearerï¿½eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\"",
                 });
                 swagger.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
@@ -107,6 +121,20 @@ namespace HR_Project
                     }
                 });
             });
+
+
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy(txt,
+                builder =>
+                {
+                    builder.AllowAnyOrigin();
+                    builder.AllowAnyMethod();
+                    builder.AllowAnyHeader();
+                });
+            });
+
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -120,7 +148,7 @@ namespace HR_Project
             app.UseAuthentication();// check Jwt token 
 
             app.UseAuthorization();
-
+            app.UseCors(txt);
 
             app.MapControllers();
 

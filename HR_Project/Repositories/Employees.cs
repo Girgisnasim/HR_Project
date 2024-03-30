@@ -235,9 +235,11 @@ namespace HR_Project.Repositories
             }
 
 
+
         public Emp_DTO GetEmployeeName(string Name,int month,int year)
         { 
             
+
             Employee Emp = context.Employee.Include(D => D.Department)
                 .Include(G => G.General_Rules)
                 .SingleOrDefault(e => e.Name == Name);
@@ -248,53 +250,59 @@ namespace HR_Project.Repositories
                 return null; // Or throw an exception, depending on your requirements
             }
 
-            List<Attend> attend = context.Attend.Where(a => a.Emp_id == Emp.Id && a.Date.Month==month&&a.Date.Year==year).ToList();
-
-            Emp_DTO employee = new Emp_DTO();
-            employee.Name = Emp.Name;
-            employee.DepartmentName = Emp.Department.Name;
-            employee.Salary = Emp.Salary;
-
-            // Calculate attendance and absence days
-            int daysInMonth = DateTime.DaysInMonth(year, month);
-            int attendanceDays = attend.Count();
-            int absenceDays = daysInMonth - attendanceDays - 8;
-
-
-            employee.AttendanceDays = attendanceDays;
-            employee.AbsenceDays = absenceDays;
-
-            // Initialize bonus hours and late hours
-            int bonusHours = 0;
-            int lateHours = 0;
-
-            // Calculate bonus and late hours
-            foreach (var item in attend)
+            List<Attend> attend = context.Attend.Where(a => a.Emp_id == Emp.Id && a.Date.Month == month && a.Date.Year == year).ToList();
+            if (attend.Count > 0)
             {
-                if (item.AttendTime > Emp.AttendTime)
+                Emp_DTO employee = new Emp_DTO();
+                employee.Name = Emp.Name;
+                employee.DepartmentName = Emp.Department.Name;
+                employee.Salary = Emp.Salary;
+
+                // Calculate attendance and absence days
+                int daysInMonth = DateTime.DaysInMonth(year, month);
+                int attendanceDays = attend.Count();
+                int absenceDays = daysInMonth - attendanceDays - 8;
+
+
+                employee.AttendanceDays = attendanceDays;
+                employee.AbsenceDays = absenceDays;
+
+                // Initialize bonus hours and late hours
+                int bonusHours = 0;
+                int lateHours = 0;
+
+                // Calculate bonus and late hours
+                foreach (var item in attend)
                 {
-                    lateHours += Convert.ToInt32((item.AttendTime - Emp.AttendTime).TotalHours);
-                }
-                if (item.LeaveTime > Emp.LeaveTime)
-                {
-                    bonusHours += Convert.ToInt32((item.LeaveTime - Emp.LeaveTime).TotalHours);
+                    if (item.AttendTime > Emp.AttendTime)
+                    {
+                        lateHours += Convert.ToInt32((item.AttendTime - Emp.AttendTime).TotalHours);
+                    }
+                    if (item.LeaveTime > Emp.LeaveTime)
+                    {
+                        bonusHours += Convert.ToInt32((item.LeaveTime - Emp.LeaveTime).TotalHours);
+                    }
+
                 }
 
+                // Calculate total bonus, total discount, and final salary
+                decimal totalBonus = Convert.ToDecimal(bonusHours * Emp.General_Rules.Bonus);
+                decimal totalDiscount = Convert.ToDecimal((lateHours * Emp.General_Rules.Discound) + (absenceDays * Emp.General_Rules.Discound * 8));
+                decimal finalSalary = (Emp.Salary - totalDiscount) + totalBonus;
+
+                // Assign calculated values to employee DTO
+                employee.BounsHours = bonusHours;
+                employee.LateHours = lateHours;
+                employee.TotalBouns = totalBonus;
+                employee.TotalDiscount = totalDiscount;
+                employee.FinalSalary = finalSalary;
+
+                return employee;
             }
-
-            // Calculate total bonus, total discount, and final salary
-            decimal totalBonus = Convert.ToDecimal(bonusHours * Emp.General_Rules.Bonus);
-            decimal totalDiscount = Convert.ToDecimal((lateHours * Emp.General_Rules.Discound)+(absenceDays*Emp.General_Rules.Discound*8));
-            decimal finalSalary = (Emp.Salary - totalDiscount) + totalBonus;
-
-            // Assign calculated values to employee DTO
-            employee.BounsHours = bonusHours;
-            employee.LateHours = lateHours;
-            employee.TotalBouns = totalBonus;
-            employee.TotalDiscount = totalDiscount;
-            employee.FinalSalary = finalSalary;
-
-            return employee;
+            else
+            {
+                return null;
+            }
         }
 
     }
