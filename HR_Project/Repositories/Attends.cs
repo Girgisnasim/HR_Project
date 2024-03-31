@@ -10,5 +10,12 @@ namespace HR_Project.Repositories
         {
             this.context = context;
         }
+
+        public void DeleteEmployeeAttend(int id)
+        {
+            Attend EmpAttend = context.Attend.SingleOrDefault(x => x.Id == id);
+            context.Attend.Remove(EmpAttend);
+            context.SaveChanges();
+        }
     }
 }
