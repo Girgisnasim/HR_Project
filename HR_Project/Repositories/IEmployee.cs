@@ -8,7 +8,7 @@ namespace HR_Project.Repositories
         //Get Employee
         public Emp_DTO GetEmployeeName(string Name,int month,int year);
 
-
+        public int CountOccurrences(DateTime startDate, int month, string dayName);
         public List<Employee> GetAll();
         public Employee GetEmployee(int id);
         Employee GetEmployeeByName(string name);
