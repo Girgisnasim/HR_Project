@@ -57,5 +57,18 @@ namespace HR_Project.Controllers
             attend.DeleteEmployeeAttend(id);
             return Ok();
         }
+        [HttpPut("{id}")]
+        public ActionResult UpdateEmpAttend(int id, [FromBody] AttendEmp_DTO attendance)
+        {
+            if (id != attendance.Id)
+            {
+                return BadRequest("Mismatched Ids");
+            }
+
+            // Call the repository method to update employee attendance
+            attend.UpdateEmployeeAttend(attendance);
+            return Ok();
+        }
     }
 }
+
