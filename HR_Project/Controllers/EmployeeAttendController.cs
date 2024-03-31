@@ -10,9 +10,11 @@ namespace HR_Project.Controllers
     public class EmployeeAttendController : ControllerBase
     {
         private IEmployee EmployeeRepo;
-        public EmployeeAttendController(IEmployee _EmployeeRepo)
+        private IAttend attend;
+        public EmployeeAttendController(IEmployee _EmployeeRepo,IAttend _attend)
         {
             this.EmployeeRepo = _EmployeeRepo;
+            this.attend = _attend;
         }
 
         [HttpGet("{name:alpha}")]
@@ -48,6 +50,12 @@ namespace HR_Project.Controllers
                 List<AttendEmp_DTO> attendEmp_DTOs = EmployeeRepo.GetAttend(from, to, name);
                 return Ok(attendEmp_DTOs);
             }
+        }
+        [HttpDelete]
+        public ActionResult DeleteEmpAttend(int id)
+        {
+            attend.DeleteEmployeeAttend(id);
+            return Ok();
         }
     }
 }

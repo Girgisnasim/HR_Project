@@ -2,7 +2,9 @@
 {
     public interface IAttend
     {
-        //Get Attend By Name
+        //Delete
+        public void DeleteEmployeeAttend(int id);
+        //update
 
     }
 }
