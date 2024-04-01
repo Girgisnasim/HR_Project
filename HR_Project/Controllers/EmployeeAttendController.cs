@@ -10,9 +10,11 @@ namespace HR_Project.Controllers
     public class EmployeeAttendController : ControllerBase
     {
         private IEmployee EmployeeRepo;
-        public EmployeeAttendController(IEmployee _EmployeeRepo)
+        private IAttend attend;
+        public EmployeeAttendController(IEmployee _EmployeeRepo,IAttend _attend)
         {
             this.EmployeeRepo = _EmployeeRepo;
+            this.attend = _attend;
         }
 
         [HttpGet("{name:alpha}")]
@@ -49,5 +51,24 @@ namespace HR_Project.Controllers
                 return Ok(attendEmp_DTOs);
             }
         }
+        [HttpDelete]
+        public ActionResult DeleteEmpAttend(int id)
+        {
+            attend.DeleteEmployeeAttend(id);
+            return Ok();
+        }
+        [HttpPut("{id}")]
+        public ActionResult UpdateEmpAttend(int id, [FromBody] AttendEmp_DTO attendance)
+        {
+            if (id != attendance.Id)
+            {
+                return BadRequest("Mismatched Ids");
+            }
+
+            // Call the repository method to update employee attendance
+            attend.UpdateEmployeeAttend(attendance);
+            return Ok();
+        }
     }
 }
+
