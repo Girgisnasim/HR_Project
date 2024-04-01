@@ -22,7 +22,7 @@ namespace HR_Project.Controllers
             this.usermanger = usermanger;
             this.config = config;
         }
-         
+         // create a new account
         [HttpPost("register")]
         public async Task<IActionResult> Registration(RegisterUserDTO userDto)
         {
@@ -42,26 +42,28 @@ namespace HR_Project.Controllers
             return BadRequest(ModelState);
         }
 
-        
+        // check account is valid
         [HttpPost("login")]
         public async Task<IActionResult> Login(loginUserDTO userDto)
         {
             if (ModelState.IsValid == true)
             {
-                
-                ApplicationUser user = await usermanger.FindByNameAsync(userDto.Email);
+                //check and create token
+                ApplicationUser user = await usermanger.FindByEmailAsync(userDto.Email);
                 if (user != null)
                 {
                     bool found = await usermanger.CheckPasswordAsync(user, userDto.Password);
                     if (found)
                     {
-                       
-                        var claims = new List<Claim>();
-                        claims.Add(new Claim(ClaimTypes.Name, user.UserName));
-                        claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id));
-                        claims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
+                        //create token
+                        var claims = new List<Claim>
+                        {
+                            new Claim(ClaimTypes.Name, user.UserName),
+                            new Claim(ClaimTypes.NameIdentifier, user.Id),
+                            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                        };
 
-                       
+
                         var roles = await usermanger.GetRolesAsync(user);
                         foreach (var itemRole in roles)
                         {
@@ -72,13 +74,13 @@ namespace HR_Project.Controllers
 
                         SigningCredentials signincred =
                             new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-                       
+
                         JwtSecurityToken mytoken = new JwtSecurityToken(
-                            issuer: config["JWT:ValidIssuer"],
-                            audience: config["JWT:ValidAudiance"],
-                            claims: claims,
-                            expires: DateTime.UtcNow.AddDays(1),
-                            signingCredentials: signincred
+                            issuer: config["JWT:ValidIssuer"],// url providor swager web api
+                            audience: config["JWT:ValidAudiance"],// url consumers angular
+                            claims: claims,//custom claims
+                            expires: DateTime.UtcNow.AddDays(1),//expire date
+                            signingCredentials: signincred//signiture
                             );
                         return Ok(new
                         {
@@ -91,13 +93,16 @@ namespace HR_Project.Controllers
 
             }
             return Unauthorized();
+
+
         }
 
+        
 
 
 
 
-      
+
 
 
 

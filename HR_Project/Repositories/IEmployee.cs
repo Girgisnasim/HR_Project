@@ -15,9 +15,11 @@ namespace HR_Project.Repositories
         public Employee Add(EmployeeWthDepartmentDTO EmployeeDTO);
         public Employee Edit(EmployeeWthDepartmentDTO EmployeeDTO, int id);
         public Employee Delete(int id);
+
         public void Save();
         
       
+
 
         //Get Attend
         public List<AttendEmp_DTO> GetAttend(DateOnly  from, DateOnly to,string name);

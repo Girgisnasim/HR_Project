@@ -1,6 +1,7 @@
 ﻿using HR_Project.DTO;
 using HR_Project.Models;
 using HR_Project.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,6 +9,7 @@ namespace HR_Project.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[Authorize]
     public class EmployeeController : ControllerBase
     {
         HRContext context;
