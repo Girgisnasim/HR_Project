@@ -19,17 +19,24 @@ namespace HR_Project.Repositories
             context.SaveChanges();
         }
 
-        public void UpdateEmployeeAttend(AttendEmp_DTO attendance)
+        public Attend GetEmployeeAttend(int Id)
+        {
+            Attend attend = context.Attend.SingleOrDefault(x => x.Id == Id);
+            return attend;
+        }
+
+        public void UpdateEmployeeAttend(AttendDTO attendance)
         {
             // Retrieve the corresponding employee attendance from the database
             Attend EmpAttend = context.Attend.Find(attendance.Id);
 
             // Update the retrieved attendance entity with the new values
-            EmpAttend.AttendTime = attendance.AttendTime[0];
-            EmpAttend.LeaveTime = attendance.LeaveTime[0];
+            EmpAttend.AttendTime = attendance.AttendTime;
+            EmpAttend.LeaveTime = attendance.LeaveTime;
 
             // Save the changes to the database
             context.SaveChanges();
         }
+
     }
 }
