@@ -25,14 +25,12 @@ namespace HR_Project.Repositories
             return context.Employee.Include(e => e.Department).ToList();
 
         }
-        ////////////////////////////////////////////
         public Employee GetEmployee(int id)
         {
             return context.Employee.Include(e => e.Department).FirstOrDefault(n => n.Id == id);
 
 
         }
-        ////////////////////////////////////////////
 
         public Employee GetEmployeeByName(string name)
         {
@@ -40,7 +38,6 @@ namespace HR_Project.Repositories
                                    .FirstOrDefault(e => e.Name == name);
         }
 
-        ////////////////////////////////////////////
 
         public Employee Add(EmployeeWthDepartmentDTO EmployeeDTO)
         {
@@ -69,7 +66,6 @@ namespace HR_Project.Repositories
 
         }
 
-        ////////////////////////////////////////////
       
         public Employee Edit(EmployeeWthDepartmentDTO EmployeeDTO, int id)
         {
@@ -95,7 +91,6 @@ namespace HR_Project.Repositories
 
         }
 
-        ////////////////////////////////////////////
         public Employee Delete(int id)
         {
             Employee employee = GetEmployee(id);
@@ -103,16 +98,22 @@ namespace HR_Project.Repositories
             return employee;
         }
 
-
-
-
-
-        ////////////////////////////////////////////
-        public void Save()
+        public int CountOccurrences(DateTime startDate, int month, string dayName)
         {
-            context.SaveChanges();
+            int year = startDate.Year;
+            int daysInMonth = DateTime.DaysInMonth(year, month);
+            int count = 0;
+            for (int day = 1; day <= daysInMonth; day++)
+            {
+                DateTime date = new DateTime(year, month, day);
+                if (date.DayOfWeek.ToString() == dayName)
+                {
+                    count++;
+                }
+            }
+            return count;
         }
-        ////////////////////////////////////////////
+
      
 
 
@@ -182,6 +183,7 @@ namespace HR_Project.Repositories
         //    return employee;
         //}
 
+
         //Clean Code to Don't repeat your self
         public List<Attend> AttendEmps(DateOnly from, DateOnly to, string? name)
         {
@@ -221,6 +223,7 @@ namespace HR_Project.Repositories
                 foreach (Attend emp in attends)
                 {
                     AttendEmp_DTO attendEmp = new AttendEmp_DTO();
+                    attendEmp.Id = emp.Id;
                     attendEmp.EmpName = emp.Employee.Name;
                     attendEmp.DepartmentName = emp.Employee.Department.Name;
                     List<Attend> test = context.Attend.
@@ -253,6 +256,9 @@ namespace HR_Project.Repositories
             List<Attend> attend = context.Attend.Where(a => a.Emp_id == Emp.Id && a.Date.Month == month && a.Date.Year == year).ToList();
             if (attend.Count > 0)
             {
+                DateTime dayoffs = new DateTime(year, month, 1);
+                int dayoff1 = CountOccurrences(dayoffs, month, Emp.General_Rules.OffDay1);
+                int dayoff2 = CountOccurrences(dayoffs, month, Emp.General_Rules.OffDay2);
                 Emp_DTO employee = new Emp_DTO();
                 employee.Name = Emp.Name;
                 employee.DepartmentName = Emp.Department.Name;
@@ -261,7 +267,7 @@ namespace HR_Project.Repositories
                 // Calculate attendance and absence days
                 int daysInMonth = DateTime.DaysInMonth(year, month);
                 int attendanceDays = attend.Count();
-                int absenceDays = daysInMonth - attendanceDays - 8;
+                int absenceDays = daysInMonth - attendanceDays - (dayoff1+dayoff2);
 
 
                 employee.AttendanceDays = attendanceDays;
@@ -305,6 +311,10 @@ namespace HR_Project.Repositories
             }
         }
 
+        public void Save()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
 
