@@ -27,7 +27,12 @@ namespace HR_Project.Repositories
 
        //Delete
         public void DeleteEmployeeAttend(int id);
+        //Get attend by id
+        public Attend GetEmployeeAttend(int Id);
         //update
+
+        public void UpdateEmployeeAttend(AttendDTO attendance);
+
         public void UpdateEmployeeAttend(AttendEmp_DTO attendance);
 
     }

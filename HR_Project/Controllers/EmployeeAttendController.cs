@@ -1,4 +1,5 @@
 ﻿using HR_Project.DTO;
+using HR_Project.Models;
 using HR_Project.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -41,10 +42,11 @@ namespace HR_Project.Controllers
             DateOnly from = new DateOnly(fromYear, fromMonth, fromDay);
             DateOnly to = new DateOnly(toYear, toMonth, toDay);
 
-            if (from > to || from.Year<2008|| (to.Year>DateTime.Now.Year || to.Month> DateTime.Now.Month || to.Day> DateTime.Now.Day))
+            if (from > to || from.Year < 2008 || to > DateOnly.FromDateTime(DateTime.Now))
             {
                 return BadRequest();
             }
+
             else
             {
                 List<AttendEmp_DTO> attendEmp_DTOs = EmployeeRepo.GetAttend(from, to, name);
@@ -57,15 +59,15 @@ namespace HR_Project.Controllers
             attend.DeleteEmployeeAttend(id);
             return Ok();
         }
-        [HttpPut("{id}")]
-        public ActionResult UpdateEmpAttend(int id, [FromBody] AttendEmp_DTO attendance)
+        [HttpGet("{id}")]
+        public ActionResult GetAttend(int id)
         {
-            if (id != attendance.Id)
-            {
-                return BadRequest("Mismatched Ids");
-            }
-
-            // Call the repository method to update employee attendance
+           Attend attendEmp= attend.GetEmployeeAttend(id);
+            return Ok(attendEmp);
+        }
+        [HttpPut()]
+        public ActionResult UpdateEmpAttend([FromBody] AttendDTO attendance)
+        {
             attend.UpdateEmployeeAttend(attendance);
             return Ok();
         }
