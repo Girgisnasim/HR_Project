@@ -27,7 +27,7 @@ namespace HR_Project.Repositories
         }
         
             
-        public Holiday insert(HolidayDTO holidayDTO)
+        public void insert(HolidayDTO holidayDTO)
         {
 
             Holiday holiday = new Holiday()
@@ -35,12 +35,11 @@ namespace HR_Project.Repositories
                 Id = holidayDTO.Id,
                 Name = holidayDTO.Name,
                 Date = holidayDTO.Date,
-                HR_id = holidayDTO.HR_id,
+                HR_id = 2,
                
             };
             context.Holiday.Add(holiday);
 
-            return holiday;
         }
 
         public void Save()
