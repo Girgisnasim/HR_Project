@@ -3,6 +3,7 @@ using HR_Project.Models;
 
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 
 
@@ -30,24 +31,7 @@ namespace HR_Project.Repositories
         {
             context.SaveChanges();
         }
-        //public string GetEmployeeNameById(A empId)
-        //{
-        //    using (var context = new HRContext())
-        //    {
-               
-        //        var employee = context.Employee.FirstOrDefault(e => e.Id == empId);
-
-               
-        //        if (employee != null)
-        //        {
-        //            return employee.Name; 
-        //        }
-        //        else
-        //        {
-        //            return null; 
-        //        }
-        //    }
-        //}
+      
 
         public Attend insert(Attend_DTO attendDTO)
         {
@@ -107,17 +91,36 @@ namespace HR_Project.Repositories
             // Retrieve the corresponding employee attendance from the database
             Attend EmpAttend = context.Attend.Find(attendance.Id);
 
+            if (EmpAttend == null)
+            {
+                // Handle case where attendance record with given ID is not found
+                throw new ArgumentException("Attendance record not found.");
+            }
+
+            // Parse the input time strings to DateTime objects
+            DateTime attTime;
+            if (!DateTime.TryParseExact(attendance.AttendTime, new[] { "HH:mm:ss", "HH:mm" }, CultureInfo.InvariantCulture, DateTimeStyles.None, out attTime))
+            {
+                // Handle invalid time format
+                throw new ArgumentException("Invalid attend time format. Please use 'HH:mm' or 'HH:mm:ss'.");
+            }
+
+            DateTime leaveTime;
+            if (!DateTime.TryParseExact(attendance.LeaveTime, new[] { "HH:mm:ss", "HH:mm" }, CultureInfo.InvariantCulture, DateTimeStyles.None, out leaveTime))
+            {
+                // Handle invalid time format
+                throw new ArgumentException("Invalid leave time format. Please use 'HH:mm' or 'HH:mm:ss'.");
+            }
+
             // Update the retrieved attendance entity with the new values
-            EmpAttend.AttendTime = attendance.AttendTime;
-            EmpAttend.LeaveTime = attendance.LeaveTime;
+            EmpAttend.AttendTime = attTime.TimeOfDay;
+            EmpAttend.LeaveTime = leaveTime.TimeOfDay;
 
             // Save the changes to the database
+            context.Attend.Update(EmpAttend);
             context.SaveChanges();
         }
 
-        public void UpdateEmployeeAttend(AttendEmp_DTO attendance)
-        {
-            throw new NotImplementedException();
-        }
+       
     }
 }
