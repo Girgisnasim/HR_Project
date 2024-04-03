@@ -58,11 +58,6 @@ namespace HR_Project.Controllers
         {
             var Holiday = holiday.GetById(id); 
 
-            if (Holiday == null)
-            {
-                return NotFound();
-            }
-
             var holidayDTO = new HolidayDTO
             {
                 Id = Holiday.Id,
@@ -84,23 +79,28 @@ namespace HR_Project.Controllers
             return Ok();
         }
 
-        [HttpPut("{id}")]
-        public ActionResult Editholiday(HolidayDTO holidayDTO, int id)
+        [HttpPut]
+        public ActionResult Editholiday(HolidayDTO holidayDTO)
         {
-            if (holidayDTO == null) NotFound();
-            if (id == null) BadRequest();
-            Holiday Holiday = holiday.Update(holidayDTO, id);
-            holiday.Save();
-            return Ok(Holiday);
+
+            Holiday Holiday = holiday.Update(holidayDTO);
+            if(holidayDTO == null)
+            {
+                return BadRequest();
+            }
+            else {
+                holiday.Save();
+                return Ok();
+            }
+
         }
 
         [HttpDelete]
         public ActionResult Delete(int id)
         {
-            if (id == null) BadRequest();
-            Holiday Holiday = holiday.Delete(id);
+            holiday.Delete(id);
             holiday.Save();
-            return Ok(Holiday);
+            return Ok();
         }
     }
 }

@@ -23,7 +23,7 @@ namespace HR_Project.Repositories
 
         public Holiday GetById(int id)
         {
-            return context.Holiday.Include(h => h.HR).SingleOrDefault(h=>h.Id==id);
+            return context.Holiday.SingleOrDefault(h=>h.Id==id);
         }
         
             
@@ -48,20 +48,19 @@ namespace HR_Project.Repositories
            
         }
 
-        public Holiday Update(HolidayDTO holidayDTO, int id)
+        public Holiday Update(HolidayDTO holidayDTO)
         {
-            Holiday holiday = GetById(id);
-            holiday.Id = id;
+            Holiday holiday = context.Holiday.SingleOrDefault(h => h.Id == holidayDTO.Id);
+            holiday.Id = holidayDTO.Id;
             holiday.Name = holidayDTO.Name;
             holiday.Date = holidayDTO.Date;
             holiday.HR_id = holidayDTO.HR_id;
             return holiday;
         }
-        public Holiday Delete(int id)
+        public void Delete(int id)
         {
             Holiday holiday = GetById(id);
             context.Holiday.Remove(holiday);
-            return holiday;
         }
     }
 }
