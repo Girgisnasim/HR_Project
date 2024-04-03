@@ -115,5 +115,9 @@ namespace HR_Project.Repositories
             context.SaveChanges();
         }
 
+        public void UpdateEmployeeAttend(AttendEmp_DTO attendance)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
