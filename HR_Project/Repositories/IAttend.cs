@@ -33,7 +33,6 @@ namespace HR_Project.Repositories
 
         public void UpdateEmployeeAttend(AttendDTO attendance);
 
-        public void UpdateEmployeeAttend(AttendEmp_DTO attendance);
 
     }
 }

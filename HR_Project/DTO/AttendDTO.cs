@@ -10,9 +10,9 @@ namespace HR_Project.DTO
 
         public DateOnly Date { get; set; }
 
-        public TimeSpan LeaveTime { get; set; }
+        public string LeaveTime { get; set; }
 
-        public TimeSpan AttendTime { get; set; }
+        public string AttendTime { get; set; }
 
         public int? Emp_id { get; set; }
 

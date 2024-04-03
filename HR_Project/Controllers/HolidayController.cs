@@ -29,7 +29,6 @@ namespace HR_Project.Controllers
                     Name = item.Name,
                     Date = item.Date,
                     HR_id= item.HR_id,
-                    HR_Name=item.HR.Name,
                     //Emp_name = item.Employee.Name,
 
                 };
@@ -70,7 +69,6 @@ namespace HR_Project.Controllers
                 Name = Holiday.Name,
                 Date = Holiday.Date,
                 HR_id = Holiday.HR_id,
-                HR_Name=Holiday.HR.Name
                 
             };
 
@@ -81,15 +79,9 @@ namespace HR_Project.Controllers
         [HttpPost]
         public ActionResult Addholiday(HolidayDTO holidayDTO)
         {
-            if (holidayDTO == null) NotFound();
-            Holiday Holiday = new Holiday();
-            if (ModelState.IsValid)
-            {
-                Holiday = holiday.insert(holidayDTO);
+               holiday.insert(holidayDTO);
                 holiday.Save();
-
-            }
-            return Ok(Holiday);
+            return Ok();
         }
 
         [HttpPut("{id}")]
