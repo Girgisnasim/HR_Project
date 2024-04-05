@@ -25,9 +25,8 @@ namespace HR_Project.DTO
 
 
         public int? HR_id { get; set; }
-        public string? HR_name { get; set; }
         public int? Emp_id { get; set; }
-        public string? Emp_name { get; set; }
+
        
     }
 }
