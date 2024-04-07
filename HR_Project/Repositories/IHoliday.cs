@@ -12,7 +12,7 @@ namespace HR_Project.Repositories
        
         public void Save();
 
-        public void insert(HolidayDTO holidayDTO);
+        public Holiday insert(HolidayDTO holidayDTO);
         public Holiday Update(HolidayDTO holidayDTO);
         public void Delete(int id);
     }
