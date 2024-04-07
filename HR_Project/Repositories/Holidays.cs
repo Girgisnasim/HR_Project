@@ -63,5 +63,7 @@ namespace HR_Project.Repositories
             Holiday holiday = GetById(id);
             context.Holiday.Remove(holiday);
         }
+
+       
     }
 }
