@@ -246,11 +246,19 @@ namespace HR_Project.Repositories
             Employee Emp = context.Employee.Include(D => D.Department)
                 .Include(G => G.General_Rules)
                 .SingleOrDefault(e => e.Name == Name);
+            int duration = 0;
 
             if (Emp == null)
             {
                 // Handle the case where no employee with the given ID is found
                 return null; // Or throw an exception, depending on your requirements
+            }
+            Holiday holiday = context.Holiday.SingleOrDefault(e=>e.Date.Month == month && e.Date.Year == year);
+            if (holiday != null)
+            {
+                Emp_Holiday emp_Holiday = context.Emp_Holiday.SingleOrDefault(h=>h.Holiday_id == holiday.Id && h.Employee_id == Emp.Id);
+
+                duration = emp_Holiday.Duration;
             }
 
             List<Attend> attend = context.Attend.Where(a => a.Emp_id == Emp.Id && a.Date.Month == month && a.Date.Year == year).ToList();
@@ -267,7 +275,7 @@ namespace HR_Project.Repositories
                 // Calculate attendance and absence days
                 int daysInMonth = DateTime.DaysInMonth(year, month);
                 int attendanceDays = attend.Count();
-                int absenceDays = daysInMonth - attendanceDays - (dayoff1+dayoff2);
+                int absenceDays = daysInMonth - attendanceDays - (dayoff1+dayoff2)-duration;
 
 
                 employee.AttendanceDays = attendanceDays;
