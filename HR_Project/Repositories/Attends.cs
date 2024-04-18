@@ -3,6 +3,8 @@ using HR_Project.Models;
 
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Globalization;
 
 
 
@@ -30,53 +32,47 @@ namespace HR_Project.Repositories
         {
             context.SaveChanges();
         }
-        //public string GetEmployeeNameById(A empId)
-        //{
-        //    using (var context = new HRContext())
-        //    {
-               
-        //        var employee = context.Employee.FirstOrDefault(e => e.Id == empId);
+      
 
-               
-        //        if (employee != null)
-        //        {
-        //            return employee.Name; 
-        //        }
-        //        else
-        //        {
-        //            return null; 
-        //        }
-        //    }
-        //}
-
-        public Attend insert(Attend_DTO attendDTO)
+        public Attend insert(int id , DateTime dateTime, int hr_id)
         {
-            //string employeeName = GetEmployeeNameById(attendDTO.Emp_id);
+            DateOnly dateOnly = DateOnly.FromDateTime(dateTime);
+            Attend attend=context.Attend.SingleOrDefault(e => e.Emp_id == id && e.Date== dateOnly);
 
-            Attend attend = new Attend()
+            if(attend == null)
             {
-                Id = attendDTO.Id,
-                Date = attendDTO.Date,
-                LeaveTime = attendDTO.LeaveTime,
-                AttendTime = attendDTO.AttendTime,
-                Emp_id = attendDTO.Emp_id,
-                //Emp_Name = employeeName
-            };
-            context.Attend.Add(attend);
-          
-            return attend;
+                Attend AttendEmp=new Attend();
+                AttendEmp.Date = dateOnly;
+                AttendEmp.Emp_id= id;
+                AttendEmp.AttendTime = dateTime-DateTime.Today;
+                AttendEmp.HR_id = hr_id;
+                context.Attend.Add(AttendEmp);
+                return AttendEmp;
+
+            }
+            else
+            {
+                return null;
+            }
           
         }
      
-        public Attend Update(Attend_DTO attendDTO, int id)
+        public Attend Update(int id)
         {
-            Attend attend = GetById(id);
-            attend.Id = id;
-            attend.Date = attendDTO.Date;
-            attend.AttendTime = attendDTO.AttendTime;
-            attend.LeaveTime= attendDTO.LeaveTime;
-            attend.Emp_id = attendDTO.Emp_id;
-            return attend;
+            DateTime dateTime = DateTime.Now;
+            DateOnly dateOnly = DateOnly.FromDateTime(dateTime);
+            Attend attend = context.Attend.SingleOrDefault(e => e.Emp_id == id && e.Date == dateOnly);
+
+            if(attend == null)
+            {
+                return null;
+            }
+            else
+            {
+                attend.LeaveTime=dateTime- DateTime.Today;
+                return attend;
+            }
+
         }
 
         public Attend Delete(int id)
@@ -96,18 +92,47 @@ namespace HR_Project.Repositories
             context.SaveChanges();
         }
 
-        public void UpdateEmployeeAttend(AttendEmp_DTO attendance)
+        public Attend GetEmployeeAttend(int Id)
+        {
+            Attend attend = context.Attend.SingleOrDefault(x => x.Id == Id);
+            return attend;
+        }
+
+        public void UpdateEmployeeAttend(AttendDTO attendance)
         {
             // Retrieve the corresponding employee attendance from the database
             Attend EmpAttend = context.Attend.Find(attendance.Id);
 
+            if (EmpAttend == null)
+            {
+                // Handle case where attendance record with given ID is not found
+                throw new ArgumentException("Attendance record not found.");
+            }
+
+            // Parse the input time strings to DateTime objects
+            DateTime attTime;
+            if (!DateTime.TryParseExact(attendance.AttendTime, new[] { "HH:mm:ss", "HH:mm" }, CultureInfo.InvariantCulture, DateTimeStyles.None, out attTime))
+            {
+                // Handle invalid time format
+                throw new ArgumentException("Invalid attend time format. Please use 'HH:mm' or 'HH:mm:ss'.");
+            }
+
+            DateTime leaveTime;
+            if (!DateTime.TryParseExact(attendance.LeaveTime, new[] { "HH:mm:ss", "HH:mm" }, CultureInfo.InvariantCulture, DateTimeStyles.None, out leaveTime))
+            {
+                // Handle invalid time format
+                throw new ArgumentException("Invalid leave time format. Please use 'HH:mm' or 'HH:mm:ss'.");
+            }
+
             // Update the retrieved attendance entity with the new values
-            EmpAttend.AttendTime = attendance.AttendTime[0];
-            EmpAttend.LeaveTime = attendance.LeaveTime[0];
+            EmpAttend.AttendTime = attTime.TimeOfDay;
+            EmpAttend.LeaveTime = leaveTime.TimeOfDay;
 
             // Save the changes to the database
+            context.Attend.Update(EmpAttend);
             context.SaveChanges();
         }
+
 
     }
 }
