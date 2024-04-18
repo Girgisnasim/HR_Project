@@ -14,6 +14,7 @@ using static System.Net.Mime.MediaTypeNames;
 
 using System.Security.Principal;
 using System.Text;
+using HrSystem.Seeds;
 
 
 namespace HR_Project
@@ -23,7 +24,7 @@ namespace HR_Project
         //public static object Configuration { get; private set; }
 
 
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var txt = "hi";
             var builder = WebApplication.CreateBuilder(args);
@@ -39,10 +40,10 @@ namespace HR_Project
 
             builder.Services.AddDbContext<HRContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("conn")));
-           
+
 
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-            .AddEntityFrameworkStores<HRContext>();
+       .AddEntityFrameworkStores<HRContext>().AddDefaultTokenProviders();
             // used jwt token in check authentiacation 
             builder.Services.AddAuthentication(options =>
             {
@@ -135,7 +136,33 @@ namespace HR_Project
             });
 
 
+          
+
             var app = builder.Build();
+
+
+            // Add Scope
+            using var scope = app.Services.CreateScope();
+            var services = scope.ServiceProvider;
+            var looggerFactory = services.GetRequiredService<ILoggerFactory>();
+            var logger = looggerFactory.CreateLogger("app");
+            try
+            {
+                var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+                var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+                ;
+                await DefaultRoles.seedAsync(roleManager);
+                await DefaultUser.SeedAdminUserAsync(userManager, roleManager);
+                logger.LogInformation("Data seeded");
+                logger.LogInformation("App started");
+
+            }
+            catch (Exception ex)
+            {
+
+                logger.LogWarning(ex, "an error ecured while seeding data");
+            }
+
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
