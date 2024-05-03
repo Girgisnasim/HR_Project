@@ -18,6 +18,10 @@ namespace HR_Project.DTO
         //[Required]
         //public string FullName { get; set; }
 
-        public List<string> Role { get; set; }
+
+        //public List<CheckBoxDto> Role { get; set; }
+        public IEnumerable<string> Roles { get; set; }
+
+
     }
 }

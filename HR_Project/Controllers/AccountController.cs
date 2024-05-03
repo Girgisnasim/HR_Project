@@ -29,6 +29,12 @@ namespace HR_Project.Controllers
             if (ModelState.IsValid)
             {
 
+
+                ApplicationUser user = new ApplicationUser();
+                
+                user.UserName = userDto.UserName;
+                user.Email = userDto.Email;
+
                 ApplicationUser user = new ApplicationUser()
                 {
 
@@ -38,6 +44,7 @@ namespace HR_Project.Controllers
                     //Role = userDto.Role
 
                 };
+
 
                 IdentityResult result = await usermanger.CreateAsync(user, userDto.Password);
                 if (result.Succeeded)
