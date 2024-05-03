@@ -34,7 +34,11 @@ namespace HR_Project.Controllers
                     //FullName = user.FullName,
                     Email = user.Email,
                     Password = user.PasswordHash,
+
                     //Role = (List<string>)_userManager.GetRolesAsync(user).Result
+
+                    Role = (List<string>)_userManager.GetRolesAsync(user).Result
+
                 };
                 userDtos.Add(userDto);
             }

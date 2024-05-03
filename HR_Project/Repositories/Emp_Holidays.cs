@@ -10,5 +10,13 @@ namespace HR_Project.Repositories
         {
             this.context = context;
         }
+
+        public void AddEmpHoliday(Emp_Holiday emp_Holidays)
+        {
+            context.Emp_Holiday.Add(emp_Holidays);
+            context.SaveChanges();
+
+
+        }
     }
 }

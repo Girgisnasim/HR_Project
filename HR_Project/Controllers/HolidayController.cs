@@ -11,9 +11,13 @@ namespace HR_Project.Controllers
     public class HolidayController : ControllerBase
     {
         IHoliday holiday;
-        public HolidayController(IHoliday holiday)
+        IEmployee employee;
+        IEmp_Holiday employee_holiday;
+        public HolidayController(IHoliday holiday, IEmployee employee, IEmp_Holiday employee_holiday)
         {
-            this.holiday=holiday;
+            this.holiday = holiday;
+            this.employee = employee;
+            this.employee_holiday = employee_holiday;
         }
         [HttpGet]
         public ActionResult GetAll()
@@ -28,8 +32,7 @@ namespace HR_Project.Controllers
                     Id = item.Id,
                     Name = item.Name,
                     Date = item.Date,
-                    HR_id= item.HR_id,
-                    HR_Name=item.HR.Name,
+                    HR_id = item.HR_id,
                     //Emp_name = item.Employee.Name,
 
                 };
@@ -57,12 +60,7 @@ namespace HR_Project.Controllers
         //}
         public ActionResult GetById(int id)
         {
-            var Holiday = holiday.GetById(id); 
-
-            if (Holiday == null)
-            {
-                return NotFound();
-            }
+            var Holiday = holiday.GetById(id);
 
             var holidayDTO = new HolidayDTO
             {
@@ -70,45 +68,53 @@ namespace HR_Project.Controllers
                 Name = Holiday.Name,
                 Date = Holiday.Date,
                 HR_id = Holiday.HR_id,
-                HR_Name=Holiday.HR.Name
-                
+
             };
 
             return Ok(holidayDTO);
         }
 
 
-        [HttpPost]
-        public ActionResult Addholiday(HolidayDTO holidayDTO)
+        [HttpPost("{duration:int}")]
+        public ActionResult Addholiday(HolidayDTO holidayDTO,int duration)
         {
-            if (holidayDTO == null) NotFound();
-            Holiday Holiday = new Holiday();
-            if (ModelState.IsValid)
-            {
-                Holiday = holiday.insert(holidayDTO);
+            List<Employee> employees= employee.GetAll();
+            Holiday holidays=holiday.insert(holidayDTO);
                 holiday.Save();
-
+           foreach(var emp in employees)
+            {
+                Emp_Holiday emp_Holiday = new Emp_Holiday();
+                emp_Holiday.Employee_id = emp.Id;
+                emp_Holiday.Holiday_id = holidays.Id;
+                emp_Holiday.Duration= duration;
+                employee_holiday.AddEmpHoliday(emp_Holiday);
+                
             }
-            return Ok(Holiday);
+            return Ok();
         }
 
-        [HttpPut("{id}")]
-        public ActionResult Editholiday(HolidayDTO holidayDTO, int id)
+        [HttpPut]
+        public ActionResult Editholiday(HolidayDTO holidayDTO)
         {
-            if (holidayDTO == null) NotFound();
-            if (id == null) BadRequest();
-            Holiday Holiday = holiday.Update(holidayDTO, id);
-            holiday.Save();
-            return Ok(Holiday);
+
+            Holiday Holiday = holiday.Update(holidayDTO);
+            if(holidayDTO == null)
+            {
+                return BadRequest();
+            }
+            else {
+                holiday.Save();
+                return Ok();
+            }
+
         }
 
         [HttpDelete]
         public ActionResult Delete(int id)
         {
-            if (id == null) BadRequest();
-            Holiday Holiday = holiday.Delete(id);
+            holiday.Delete(id);
             holiday.Save();
-            return Ok(Holiday);
+            return Ok();
         }
     }
 }

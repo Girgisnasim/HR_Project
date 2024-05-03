@@ -29,22 +29,58 @@ namespace HR_Project.Controllers
             if (ModelState.IsValid)
             {
 
+
                 ApplicationUser user = new ApplicationUser();
                 
                 user.UserName = userDto.UserName;
                 user.Email = userDto.Email;
+
+                ApplicationUser user = new ApplicationUser()
+                {
+
+                    UserName = userDto.UserName,
+                    Email = userDto.Email,
+
+                    //Role = userDto.Role
+
+                };
+
+
                 IdentityResult result = await usermanger.CreateAsync(user, userDto.Password);
                 if (result.Succeeded)
                 {
-                    return Ok("Account Add Success");
+                    return Ok(result);
                 }
                 return BadRequest(result.Errors.FirstOrDefault());
             }
             return BadRequest(ModelState);
-        }
 
-        // check account is valid
-        [HttpPost("login")]
+
+            //            if (ModelState.IsValid)
+            //            {
+
+            //                ApplicationUser user = new ApplicationUser();
+
+            //        user.UserName = userDto.UserName;
+            //                user.Email = userDto.Email;
+
+            //                IdentityResult result = await usermanger.CreateAsync(user, userDto.Password);
+            //                if (result.Succeeded)
+            //                {
+            //                    return Ok("Account Add Success");
+            //    }
+            //                return BadRequest(result.Errors.FirstOrDefault());
+            //}
+            //return BadRequest(ModelState);
+                 }
+
+
+
+
+
+
+            // check account is valid
+            [HttpPost("login")]
         public async Task<IActionResult> Login(loginUserDTO userDto)
         {
             if (ModelState.IsValid == true)

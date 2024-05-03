@@ -21,14 +21,16 @@ namespace HR_Project.Repositories
         //public string GetEmployeeNameById(int empId);
 
         // For Insert, Update And Delete
-        public Attend insert(Attend_DTO attendDTO);
-        public Attend Update(Attend_DTO attendDTO, int id);
+        public Attend insert(int id,DateTime dateTime,int hr_id);
+        public Attend Update(int id);
         public Attend Delete(int id);
 
        //Delete
         public void DeleteEmployeeAttend(int id);
+        //Get attend by id
+        public Attend GetEmployeeAttend(int Id);
         //update
-        public void UpdateEmployeeAttend(AttendEmp_DTO attendance);
+        public void UpdateEmployeeAttend(AttendDTO attendance);
 
     }
 }

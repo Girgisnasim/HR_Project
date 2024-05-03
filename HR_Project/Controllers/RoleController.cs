@@ -5,7 +5,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+
 using System.Security.Claims;
+
+
 
 namespace HR_Project.Controllers
 {
@@ -13,6 +16,7 @@ namespace HR_Project.Controllers
     [ApiController]
     public class RoleController : ControllerBase
     {
+
         //private static List<Permissions_HR> permissions = new List<Permissions_HR>
 
         //{
@@ -51,6 +55,9 @@ namespace HR_Project.Controllers
 
         //};
 
+      
+
+
         public readonly RoleManager<IdentityRole> roleManager;
 
         public RoleController(RoleManager<IdentityRole> roleManager)
@@ -59,12 +66,16 @@ namespace HR_Project.Controllers
         }
 
 
+
         //[HttpGet]
         //[Route("api/permissions")]
         //public ActionResult<IEnumerable<Permissions_HR>> GetPermissions()
         //{
         //    return Ok(permissions);
         //}
+
+       
+
 
         #region GetAll Roles
         [HttpGet]
@@ -124,6 +135,7 @@ namespace HR_Project.Controllers
             };
             return Ok(permissionRole);
         }
+
 
 
         [HttpGet("AllPermessions")]

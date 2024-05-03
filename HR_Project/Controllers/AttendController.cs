@@ -30,10 +30,7 @@ namespace HR_Project.Controllers
                     LeaveTime = item.LeaveTime,
                     AttendTime = item.AttendTime,
                     HR_id = item.HR_id,
-                    HR_name=item.HRs.Name,
                     Emp_id = item.Emp_id,
-                    Emp_name = item.Employee.Name,
-
 
                 };
                 attendDTOs.Add(DTO);
@@ -58,45 +55,54 @@ namespace HR_Project.Controllers
             }
             var Attend_DTO = new Attend_DTO
             {
-              Id= Attend.Id,
-              Date = Attend.Date,
-              LeaveTime= Attend.LeaveTime,
-              AttendTime = Attend.AttendTime,
-              HR_id = Attend.HR_id,
-              HR_name = Attend.HRs.Name,
-              Emp_id = Attend.Emp_id,
-              Emp_name = Attend.Employee.Name,
+                Id = Attend.Id,
+                Date = Attend.Date,
+                LeaveTime = Attend.LeaveTime,
+                AttendTime = Attend.AttendTime,
+                HR_id = Attend.HR_id,
+                Emp_id = Attend.Emp_id,
 
             };
             return Ok(Attend_DTO);
 
         }
-        
 
-        
-        [HttpPost]
-        public ActionResult AddAttend(Attend_DTO AttendDTO)
+
+
+        [HttpPost("{id:int}")]
+        public ActionResult AddAttend(int id,int hr_id)
         {
-            if (AttendDTO == null) NotFound();
-            Attend Attend = new Attend();
-            if (ModelState.IsValid)
+            DateTime dateTime= DateTime.Now;
+            Attend attendEmp=attend.insert(id, dateTime,hr_id);
+            if(attendEmp == null)
             {
-                Attend=attend.insert(AttendDTO);
-                attend.Save();
-               
+                return BadRequest();
             }
-            return Ok(Attend);
+            else
+            {
+                attend.Save();
+                return Ok(attendEmp);
+            }
+            return Ok();
         }
 
         [HttpPut("{id}")]
-        public ActionResult EditAttend(Attend_DTO AttendDTO, int id)
+        public ActionResult EditAttend(int id)
         {
-            if (AttendDTO == null) NotFound();
-            if (id == null) BadRequest();
-            Attend Attend = attend.Update(AttendDTO, id);
-            attend.Save();
-            return Ok(Attend);
+            Attend Attend = attend.Update(id);
+            if (Attend == null)
+            {
+                return BadRequest();
+            }
+            else
+            {
+                 attend.Save();
+                 return Ok(Attend);
+
+            }
         }
+
+
 
         [HttpDelete]
         public ActionResult DeleteEmployee(int id)
