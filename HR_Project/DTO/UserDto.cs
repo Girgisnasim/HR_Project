@@ -2,9 +2,9 @@
 
 namespace HR_Project.DTO
 {
-    public class RegisterUserDTO
+    public class UserDto
     {
-
+        public string ID { get; set; }
         [Required]
         public string UserName { get; set; }
 
@@ -14,13 +14,12 @@ namespace HR_Project.DTO
 
         [Required]
         public string Password { get; set; }
-        [Required]
-        [Compare("Password")]
-        public string ConfirmPassword { get; set; }
-        [Required]
-        
+
+        //[Required]
         //public string FullName { get; set; }
 
-        public string Role { get; set; }
+        //public List<CheckBoxDto> Role { get; set; }
+        public IEnumerable<string> Roles { get; set; }
+
     }
 }

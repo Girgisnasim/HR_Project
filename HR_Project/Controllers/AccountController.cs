@@ -30,6 +30,7 @@ namespace HR_Project.Controllers
             {
 
                 ApplicationUser user = new ApplicationUser();
+                
                 user.UserName = userDto.UserName;
                 user.Email = userDto.Email;
                 IdentityResult result = await usermanger.CreateAsync(user, userDto.Password);
