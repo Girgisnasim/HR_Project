@@ -178,7 +178,7 @@ namespace HR_Project.Controllers
             foreach (var claim in selectedClaims)
                 await roleManager.AddClaimAsync(role, new Claim("Permission", claim.DisplayValue));
 
-            return CreatedAtAction("ManagePermessions", role.Id);
+            return Ok();
         }
 
     }

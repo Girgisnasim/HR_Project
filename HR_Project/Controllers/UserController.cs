@@ -37,7 +37,7 @@ namespace HR_Project.Controllers
 
                     //Role = (List<string>)_userManager.GetRolesAsync(user).Result
 
-                    Role = (List<string>)_userManager.GetRolesAsync(user).Result
+                    Roles = (List<string>)_userManager.GetRolesAsync(user).Result
 
                 };
                 userDtos.Add(userDto);

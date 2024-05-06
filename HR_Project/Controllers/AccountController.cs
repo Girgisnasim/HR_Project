@@ -30,10 +30,10 @@ namespace HR_Project.Controllers
             {
 
 
-                ApplicationUser user = new ApplicationUser();
+               /* ApplicationUser user = new ApplicationUser();
                 
                 user.UserName = userDto.UserName;
-                user.Email = userDto.Email;
+                user.Email = userDto.Email;*/
 
                 ApplicationUser user = new ApplicationUser()
                 {
